@@ -1,16 +1,37 @@
 const express = require("express");
-const Slot = require("../models/Slot");
 const router = express.Router();
+const Slot = require("../models/Slot");
 
-router.get("/", async (req, res) => {
-  const slots = await Slot.find();
-  res.json(slots);
+// ✅ CREATE SLOT (ADMIN)
+router.post("/create", async (req, res) => {
+  try {
+    const { date, time } = req.body;
+
+    if (!date || !time) {
+      return res.status(400).json({ message: "Date and time are required" });
+    }
+
+    const slot = new Slot({
+      date,
+      time,
+      isBooked: false
+    });
+
+    await slot.save();
+    res.status(201).json(slot);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 });
 
-router.post("/create", async (req, res) => {
-  const slot = new Slot(req.body);
-  await slot.save();
-  res.json({ message: "Slot created" });
+// ✅ GET ALL SLOTS (USER)
+router.get("/", async (req, res) => {
+  try {
+    const slots = await Slot.find();
+    res.json(slots);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 });
 
 module.exports = router;
