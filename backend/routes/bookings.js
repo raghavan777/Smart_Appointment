@@ -4,17 +4,18 @@ const Booking = require("../models/Booking");
 const Slot = require("../models/Slot");
 
 router.post("/create", async (req, res) => {
-  try {
-    const { userName, slotId } = req.body;
+  const { userName, slotId } = req.body;
 
+  try {
     const slot = await Slot.findById(slotId);
 
-    if (!slot || slot.isBooked) {
-      return res.status(400).json({ message: "Slot already booked" });
+    if (!slot) {
+      return res.status(404).json({ message: "Slot not found" });
     }
 
-    slot.isBooked = true;
-    await slot.save();
+    if (slot.isBooked) {
+      return res.status(400).json({ message: "Slot already booked" });
+    }
 
     const booking = new Booking({
       userName,
@@ -23,9 +24,16 @@ router.post("/create", async (req, res) => {
 
     await booking.save();
 
-    res.status(201).json({ message: "Booking successful" });
+    slot.isBooked = true;
+    await slot.save();
+
+    res.status(201).json({
+      message: "Appointment booked successfully",
+      booking
+    });
+
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    res.status(500).json({ message: "Booking failed" });
   }
 });
 

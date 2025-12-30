@@ -25,13 +25,13 @@ router.post("/create", async (req, res) => {
 });
 
 // ✅ GET ALL SLOTS (USER)
+// ✅ GET ONLY AVAILABLE SLOTS (USER)
 router.get("/", async (req, res) => {
   try {
-    const slots = await Slot.find();
+    const slots = await Slot.find({ isBooked: false });
     res.json(slots);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
   }
 });
-
 module.exports = router;
