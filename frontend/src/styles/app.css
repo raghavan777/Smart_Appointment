@@ -1,45 +1,51 @@
-/* PAGE */
+/* Page */
 .container {
-  padding: 30px;
   max-width: 1200px;
   margin: auto;
-  background: #f4f7fb;
+  padding: 25px;
+  background: linear-gradient(135deg, #f8fafc, #eef2ff);
   min-height: 100vh;
 }
 
-/* TITLE */
+/* Title */
 .title {
   font-size: 28px;
-  margin-bottom: 25px;
-  color: #1f2937;
+  font-weight: 700;
+  margin-bottom: 20px;
+  color: #1e293b;
 }
 
-/* GRID ALIGNMENT (THIS IS THE KEY FIX) */
+/* Loading */
+.loading {
+  color: #64748b;
+  font-size: 16px;
+}
+
+/* Grid – SAME ALIGNMENT */
 .slot-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 20px;
-  align-items: stretch;
+  gap: 22px;
 }
 
-/* SLOT CARD */
+/* Slot Card */
 .slot-card {
-  background: linear-gradient(135deg, #ffffff, #f9fbff);
-  border-radius: 14px;
+  background: linear-gradient(135deg, #ffffff, #f1f5f9);
+  border-radius: 16px;
   padding: 18px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
 }
 
 .slot-card:hover {
   transform: translateY(-6px);
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 16px 30px rgba(0, 0, 0, 0.12);
 }
 
-/* DATE & TIME */
+/* Date & Time */
 .slot-date {
   font-size: 16px;
   font-weight: 600;
@@ -49,63 +55,52 @@
 
 .slot-time {
   font-size: 14px;
-  color: #374151;
+  color: #475569;
   margin-bottom: 14px;
 }
 
-/* BUTTON */
+/* Book Button */
 .book-btn {
-  width: 100%;
   padding: 12px;
-  background: linear-gradient(135deg, #2563eb, #1d4ed8);
-  color: #ffffff;
+  background: linear-gradient(135deg, #2563eb, #4f46e5);
+  color: white;
   border: none;
   border-radius: 10px;
-  font-size: 15px;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.3s ease, transform 0.2s ease;
 }
 
 .book-btn:hover {
-  background: linear-gradient(135deg, #1e40af, #1d4ed8);
-  transform: scale(1.02);
+  opacity: 0.9;
 }
 
-/* BOOKED SLOT */
+/* Booked Slot */
 .slot-card.booked {
-  background: linear-gradient(135deg, #ecfdf5, #d1fae5);
-  border: 1px solid #34d399;
+  background: linear-gradient(135deg, #dcfce7, #ecfeff);
+  border: 2px solid #22c55e;
 }
 
+/* Booked Badge */
 .booked-badge {
-  background: #10b981;
+  background: #22c55e;
   color: white;
   text-align: center;
   padding: 10px;
   border-radius: 10px;
-  font-weight: 600;
+  font-weight: 700;
 }
 
-/* CONFIRMATION CARD */
+/* Confirmation */
 .confirmation-card {
-  background: linear-gradient(135deg, #ecfeff, #cffafe);
-  border-left: 6px solid #06b6d4;
+  background: linear-gradient(135deg, #ecfeff, #d1fae5);
+  border-left: 6px solid #22c55e;
   padding: 16px;
-  margin-bottom: 25px;
-  border-radius: 10px;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
+  margin-bottom: 20px;
+  box-shadow: 0 8px 18px rgba(0,0,0,0.08);
 }
 
-/* EMPTY / LOADING */
-.loading,
-.empty {
-  font-size: 16px;
-  color: #6b7280;
-  margin-top: 10px;
-}
-
-/* RESPONSIVE TWEAKS */
+/* Responsive */
 @media (max-width: 768px) {
   .title {
     font-size: 22px;

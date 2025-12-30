@@ -7,6 +7,14 @@ export default function SlotList() {
   const [lastBooking, setLastBooking] = useState(null);
   const [loading, setLoading] = useState(true);
 
+  // 🔐 Login protection
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      window.location.href = "/login";
+    }
+  }, []);
+
   // Fetch slots
   useEffect(() => {
     API.get("/slots")
@@ -14,41 +22,25 @@ export default function SlotList() {
         setSlots(res.data);
         setLoading(false);
       })
-      .catch(err => {
-        console.error("Backend not reachable", err);
-        setLoading(false);
-      });
+      .catch(() => setLoading(false));
   }, []);
 
-  // Book slot
   const bookSlot = async (slotId) => {
     try {
-      const res = await API.post("/bookings/create", {
+      await API.post("/bookings/create", {
         userName: "Test User",
         slotId
       });
 
-      // Mark slot as booked (do NOT remove)
-      setSlots(prevSlots =>
-        prevSlots.map(slot =>
+      setSlots(prev =>
+        prev.map(slot =>
           slot._id === slotId ? { ...slot, isBooked: true } : slot
         )
       );
 
-      // Save confirmation
-      setLastBooking({
-        userName: "Test User",
-        slotId
-      });
-
-      alert("✅ Appointment booked successfully");
-
-    } catch (err) {
-      if (err.response && err.response.status === 400) {
-        alert("⚠️ This slot is already booked");
-      } else {
-        alert("❌ Something went wrong. Try again.");
-      }
+      setLastBooking({ userName: "Test User", slotId });
+    } catch {
+      alert("Slot already booked");
     }
   };
 
@@ -58,7 +50,6 @@ export default function SlotList() {
 
       {loading && <p className="loading">Loading slots...</p>}
 
-      {/* Confirmation Card */}
       {lastBooking && (
         <div className="confirmation-card">
           <h3>✅ Appointment Confirmed</h3>
@@ -67,7 +58,6 @@ export default function SlotList() {
         </div>
       )}
 
-      {/* Slots Grid */}
       <div className="slot-grid">
         {slots.map(slot => (
           <div

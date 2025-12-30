@@ -1,38 +1,84 @@
-.App {
-  text-align: center;
+body {
+  background: linear-gradient(120deg, #f4f7ff, #eef2ff);
+  font-family: "Segoe UI", sans-serif;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.container {
+  max-width: 1100px;
+  margin: auto;
+  padding: 20px;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.title {
+  font-size: 26px;
+  font-weight: 600;
+  margin-bottom: 20px;
   display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+  gap: 10px;
+}
+
+.slot-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+}
+
+.slot-card {
+  background: white;
+  border-radius: 14px;
+  padding: 16px;
+  box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+  transition: transform 0.2s ease;
+}
+
+.slot-card:hover {
+  transform: translateY(-4px);
+}
+
+.slot-date {
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.slot-time {
+  color: #555;
+  margin-bottom: 12px;
+}
+
+.book-btn {
+  width: 100%;
+  padding: 10px;
+  background: linear-gradient(135deg, #2563eb, #3b82f6);
+  border: none;
+  border-radius: 10px;
   color: white;
+  font-weight: 600;
+  cursor: pointer;
 }
 
-.App-link {
-  color: #61dafb;
+.book-btn:hover {
+  opacity: 0.9;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.booked {
+  border: 2px solid #10b981;
+  background: #ecfdf5;
+}
+
+.booked-badge {
+  text-align: center;
+  padding: 10px;
+  background: #10b981;
+  color: white;
+  border-radius: 10px;
+  font-weight: 600;
+}
+
+.confirmation-card {
+  background: linear-gradient(135deg, #d1fae5, #ecfeff);
+  border-left: 6px solid #10b981;
+  padding: 16px;
+  border-radius: 12px;
+  margin-bottom: 20px;
 }

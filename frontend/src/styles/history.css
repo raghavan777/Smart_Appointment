@@ -1,0 +1,11 @@
+.history-container {
+  padding: 30px;
+}
+
+.history-card {
+  background: white;
+  padding: 16px;
+  border-radius: 10px;
+  margin-bottom: 12px;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+}
