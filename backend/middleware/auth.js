@@ -1,22 +1,19 @@
 const jwt = require("jsonwebtoken");
 
-module.exports = (role) => {
-  return (req, res, next) => {
-    const token = req.headers.authorization;
+module.exports = (req, res, next) => {
+  const authHeader = req.header("Authorization");
 
-    if (!token) {
-      return res.status(401).json({ message: "No token" });
-    }
+  if (!authHeader) {
+    return res.status(401).json({ message: "No token provided" });
+  }
 
-    try {
-      const decoded = jwt.verify(token, "SECRET_KEY");
-      if (role && decoded.role !== role) {
-        return res.status(403).json({ message: "Access denied" });
-      }
-      req.user = decoded;
-      next();
-    } catch {
-      res.status(401).json({ message: "Invalid token" });
-    }
-  };
+  const token = authHeader.split(" ")[1];
+
+  try {
+    const decoded = jwt.verify(token, "SECRET_KEY");
+    req.user = decoded;
+    next();
+  } catch {
+    res.status(401).json({ message: "Invalid token" });
+  }
 };

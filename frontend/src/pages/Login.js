@@ -1,52 +1,78 @@
 import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import API from "../services/api";
-import "../styles/login.css";
+import "../styles/auth.css";
 
 export default function Login() {
+  const navigate = useNavigate();
+
+  const [role, setRole] = useState("user");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
 
   const handleLogin = async (e) => {
     e.preventDefault();
     setError("");
-    setLoading(true);
 
     try {
-      const res = await API.post("/auth/login", { email, password });
+      const res = await API.post("/auth/login", {
+        email,
+        password,
+        role
+      });
 
-      // Save auth details
+      // ✅ Save auth data
       localStorage.setItem("token", res.data.token);
       localStorage.setItem("role", res.data.role);
 
-      // Redirect based on role
+      // ✅ CORRECT REDIRECTION
       if (res.data.role === "admin") {
-        window.location.href = "/admin";
+        navigate("/admin-dashboard");   // ✅ ADMIN DASHBOARD
       } else {
-        window.location.href = "/slots";
+        navigate("/");                  // ✅ USER SLOT PAGE
       }
-    } catch (err) {
+    } catch {
       setError("❌ Invalid email or password");
-    } finally {
-      setLoading(false);
     }
   };
 
   return (
-    <div className="login-page">
-      <div className="login-card">
-        <h2>🔐 Welcome Back</h2>
-        <p className="subtitle">Login to book your appointment</p>
+    <div className="auth-bg">
+      <div className="auth-glass">
+        <div className="auth-header">
+          <h1>🔐 Welcome Back</h1>
+          <p>Login to manage your appointments</p>
+        </div>
 
-        {error && <div className="error-box">{error}</div>}
+        {error && <div className="alert error">{error}</div>}
+
+        {/* ROLE SELECTOR */}
+        <div className="role-switch">
+          <label>
+            <input
+              type="radio"
+              checked={role === "user"}
+              onChange={() => setRole("user")}
+            />
+            <span>👤 User</span>
+          </label>
+
+          <label>
+            <input
+              type="radio"
+              checked={role === "admin"}
+              onChange={() => setRole("admin")}
+            />
+            <span>🛠 Admin</span>
+          </label>
+        </div>
 
         <form onSubmit={handleLogin}>
           <div className="input-group">
-            <label>Email</label>
             <input
               type="email"
-              placeholder="Enter your email"
+              placeholder="Email address"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
@@ -54,24 +80,33 @@ export default function Login() {
           </div>
 
           <div className="input-group">
-            <label>Password</label>
             <input
               type="password"
-              placeholder="Enter your password"
+              placeholder="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
             />
           </div>
 
-          <button type="submit" disabled={loading}>
-            {loading ? "Logging in..." : "Login"}
+          <button className="auth-btn" type="submit">
+            Login
           </button>
         </form>
 
-        <p className="register-text">
-          Don’t have an account? <a href="/register">Register</a>
-        </p>
+        <div className="auth-footer">
+          Don’t have an account?{" "}
+          <Link to="/register">
+            <span>Register</span>
+          </Link>
+
+          <br />
+
+          {/* ✅ FIXED FORGOT PASSWORD */}
+          <Link to="/forgot-password" className="forgot">
+            Forgot password?
+          </Link>
+        </div>
       </div>
     </div>
   );

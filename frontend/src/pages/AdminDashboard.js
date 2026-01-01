@@ -1,40 +1,73 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import API from "../services/api";
-import "../styles/admin.css";
+import Navbar from "../components/Navbar";
+import "../styles/admin-dashboard.css";
 
 export default function AdminDashboard() {
-  const [slots, setSlots] = useState([]);
+  const [stats, setStats] = useState({
+    total: 0,
+    booked: 0,
+    available: 0,
+  });
 
+  // 🔐 ADMIN GUARD
   useEffect(() => {
-    API.get("/slots")
-      .then(res => setSlots(res.data));
+    const role = localStorage.getItem("role");
+    if (role !== "admin") {
+      window.location.href = "/login";
+    }
+  }, []);
+
+  // 📊 FETCH DASHBOARD STATS
+  useEffect(() => {
+    API.get("/admin/stats")
+      .then((res) => setStats(res.data))
+      .catch(() => alert("Failed to load dashboard stats"));
   }, []);
 
   return (
-    <div className="admin-container">
-      <h2>🛠 Admin Dashboard</h2>
+    <>
+      <Navbar />
 
-      <table>
-        <thead>
-          <tr>
-            <th>Date</th>
-            <th>Time</th>
-            <th>Status</th>
-          </tr>
-        </thead>
+      <div className="admin-dashboard">
+        <h2 className="dashboard-title">📊 Admin Dashboard</h2>
+        <p className="dashboard-subtitle">
+          Overview of appointment slot status
+        </p>
 
-        <tbody>
-          {slots.map(slot => (
-            <tr key={slot._id}>
-              <td>{slot.date}</td>
-              <td>{slot.time}</td>
-              <td>
-                {slot.isBooked ? "Booked" : "Available"}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+        {/* STAT CARDS */}
+        <div className="dashboard-grid">
+          <div className="stat-card blue">
+            <span className="icon">📅</span>
+            <h3>Total Slots</h3>
+            <p>{stats.total}</p>
+          </div>
+
+          <div className="stat-card green">
+            <span className="icon">✅</span>
+            <h3>Available</h3>
+            <p>{stats.available}</p>
+          </div>
+
+          <div className="stat-card red">
+            <span className="icon">⛔</span>
+            <h3>Booked</h3>
+            <p>{stats.booked}</p>
+          </div>
+        </div>
+
+        {/* ACTION BUTTONS */}
+        <div className="dashboard-actions">
+          <Link to="/admin" className="action-btn primary">
+            ⚙️ Manage Slots
+          </Link>
+
+          <Link to="/admin-bookings" className="action-btn secondary">
+            📋 All Bookings
+          </Link>
+        </div>
+      </div>
+    </>
   );
 }

@@ -82,3 +82,19 @@ body {
   border-radius: 12px;
   margin-bottom: 20px;
 }
+
+body.dark {
+  background: #020617;
+  color: #e5e7eb;
+}
+
+body.dark .navbar {
+  background: linear-gradient(135deg, #020617, #0f172a);
+}
+
+body.dark .card,
+body.dark .stat-card,
+body.dark .booking-card {
+  background: #0f172a;
+  color: #e5e7eb;
+}

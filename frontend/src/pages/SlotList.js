@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import API from "../services/api";
+import Navbar from "../components/Navbar"; // ✅ ADD THIS
 import "../styles/app.css";
 
 export default function SlotList() {
@@ -7,15 +8,17 @@ export default function SlotList() {
   const [lastBooking, setLastBooking] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  // 🔐 Login protection
+  // 🔐 USER LOGIN PROTECTION
   useEffect(() => {
     const token = localStorage.getItem("token");
-    if (!token) {
+    const role = localStorage.getItem("role");
+
+    if (!token || role !== "user") {
       window.location.href = "/login";
     }
   }, []);
 
-  // Fetch slots
+  // 📥 FETCH AVAILABLE SLOTS
   useEffect(() => {
     API.get("/slots")
       .then(res => {
@@ -25,6 +28,7 @@ export default function SlotList() {
       .catch(() => setLoading(false));
   }, []);
 
+  // 📌 BOOK SLOT
   const bookSlot = async (slotId) => {
     try {
       await API.post("/bookings/create", {
@@ -38,48 +42,58 @@ export default function SlotList() {
         )
       );
 
-      setLastBooking({ userName: "Test User", slotId });
+      setLastBooking({
+        userName: "Test User",
+        slotId
+      });
     } catch {
       alert("Slot already booked");
     }
   };
 
   return (
-    <div className="container">
-      <h2 className="title">📅 Available Appointment Slots</h2>
+    <>
+      {/* ✅ NAVBAR (THIS FIXES LOGOUT BUTTON ISSUE) */}
+      <Navbar />
 
-      {loading && <p className="loading">Loading slots...</p>}
+      <div className="container">
+        <h2 className="title">📅 Available Appointment Slots</h2>
 
-      {lastBooking && (
-        <div className="confirmation-card">
-          <h3>✅ Appointment Confirmed</h3>
-          <p><strong>User:</strong> {lastBooking.userName}</p>
-          <p><strong>Slot ID:</strong> {lastBooking.slotId}</p>
-        </div>
-      )}
+        {loading && <p className="loading">Loading slots...</p>}
 
-      <div className="slot-grid">
-        {slots.map(slot => (
-          <div
-            key={slot._id}
-            className={`slot-card ${slot.isBooked ? "booked" : ""}`}
-          >
-            <div className="slot-date">📅 {slot.date}</div>
-            <div className="slot-time">⏰ {slot.time}</div>
-
-            {slot.isBooked ? (
-              <div className="booked-badge">✔ Booked</div>
-            ) : (
-              <button
-                className="book-btn"
-                onClick={() => bookSlot(slot._id)}
-              >
-                Book Appointment
-              </button>
-            )}
+        {/* ✅ CONFIRMATION */}
+        {lastBooking && (
+          <div className="confirmation-card">
+            <h3>✅ Appointment Confirmed</h3>
+            <p><strong>User:</strong> {lastBooking.userName}</p>
+            <p><strong>Slot ID:</strong> {lastBooking.slotId}</p>
           </div>
-        ))}
+        )}
+
+        {/* ✅ SLOT GRID */}
+        <div className="slot-grid">
+          {slots.map(slot => (
+            <div
+              key={slot._id}
+              className={`slot-card ${slot.isBooked ? "booked" : ""}`}
+            >
+              <div className="slot-date">📅 {slot.date}</div>
+              <div className="slot-time">⏰ {slot.time}</div>
+
+              {slot.isBooked ? (
+                <div className="booked-badge">✔ Booked</div>
+              ) : (
+                <button
+                  className="book-btn"
+                  onClick={() => bookSlot(slot._id)}
+                >
+                  Book Appointment
+                </button>
+              )}
+            </div>
+          ))}
+        </div>
       </div>
-    </div>
+    </>
   );
 }

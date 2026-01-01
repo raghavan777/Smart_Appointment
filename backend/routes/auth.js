@@ -30,31 +30,33 @@ router.post("/login", async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 });
-router.post("/register", async (req, res) => {
+router.post("/login", async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const { email, password, role } = req.body;
 
-    const exists = await User.findOne({ email });
-    if (exists) {
-      return res.status(400).json({ message: "User already exists" });
+    const user = await User.findOne({ email, role });
+    if (!user) {
+      return res.status(401).json({ message: "Invalid credentials" });
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(401).json({ message: "Invalid credentials" });
+    }
 
-    await User.create({
-      name,
-      email,
-      password: hashedPassword,
-      role: "user"
-    });
+    const token = jwt.sign(
+      { id: user._id, role: user.role },
+      "SECRET_KEY",
+      { expiresIn: "1h" }
+    );
 
-    res.status(201).json({ message: "User registered successfully" });
+    res.json({ token, role: user.role });
 
   } catch (err) {
-    res.status(500).json({ message: "Registration failed" });
+    res.status(500).json({ message: "Server error" });
   }
 });
-
+  
 router.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -81,5 +83,49 @@ router.post("/login", async (req, res) => {
     res.status(500).json({ message: "Login failed" });
   }
 });
+
+// 🔑 FORGOT PASSWORD (DEMO VERSION)
+router.post("/forgot-password", async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // ⚠️ Demo only – no email sending
+    res.json({
+      message: "Password reset link sent to your email (demo)"
+    });
+
+  } catch (error) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
+// 🔐 FORGOT PASSWORD (NO EMAIL – STUDENT VERSION)
+router.post("/forgot-password", async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    // TEMP reset (for demo)
+    user.password = await bcrypt.hash("newpassword123", 10);
+    await user.save();
+
+    res.json({
+      message: "Password reset to: newpassword123 (please login and change it)"
+    });
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
+  }
+});
+
 
 module.exports = router;

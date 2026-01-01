@@ -1,0 +1,121 @@
+/* ===============================
+   ADMIN – ALL BOOKINGS UI
+=============================== */
+
+.bookings-container {
+  padding: 32px;
+  min-height: 100vh;
+  background: linear-gradient(180deg, #f4f6fb, #eef2ff);
+}
+
+/* HEADER */
+.bookings-header {
+  margin-bottom: 28px;
+}
+
+.bookings-header h2 {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.bookings-header p {
+  color: #64748b;
+  margin-top: 4px;
+}
+
+/* GRID */
+.booking-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 24px;
+}
+
+/* CARD */
+.booking-card {
+  background: white;
+  border-radius: 18px;
+  padding: 22px;
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.08);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  position: relative;
+}
+
+.booking-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 28px 55px rgba(0, 0, 0, 0.12);
+}
+
+/* USER NAME */
+.booking-user {
+  font-size: 16px;
+  font-weight: 700;
+  color: #1d4ed8;
+  margin-bottom: 10px;
+}
+
+/* INFO */
+.booking-info {
+  font-size: 14px;
+  color: #334155;
+  line-height: 1.6;
+}
+
+.booking-info span {
+  display: block;
+  margin-bottom: 6px;
+}
+
+/* BOOKED BADGE */
+.booking-badge {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: white;
+  padding: 6px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  border-radius: 999px;
+}
+
+/* DATE HIGHLIGHT */
+.booking-date {
+  margin-top: 12px;
+  padding: 10px;
+  border-radius: 12px;
+  background: #eef2ff;
+  color: #1e40af;
+  font-weight: 600;
+  text-align: center;
+}
+
+/* DARK MODE */
+body.dark .bookings-container {
+  background: linear-gradient(180deg, #0f172a, #020617);
+}
+
+body.dark .booking-card {
+  background: #1e293b;
+  color: #e5e7eb;
+}
+
+body.dark .booking-user {
+  color: #93c5fd;
+}
+
+body.dark .booking-date {
+  background: #0f172a;
+  color: #93c5fd;
+}
+
+/* MOBILE */
+@media (max-width: 600px) {
+  .bookings-container {
+    padding: 20px;
+  }
+
+  .bookings-header h2 {
+    font-size: 22px;
+  }
+}

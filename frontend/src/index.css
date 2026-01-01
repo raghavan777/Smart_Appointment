@@ -11,3 +11,40 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+body.dark {
+  background: #020617;
+  color: #e5e7eb;
+}
+
+body.dark .navbar {
+  background: linear-gradient(135deg, #020617, #0f172a);
+}
+
+body.dark .card,
+body.dark .stat-card,
+body.dark .booking-card {
+  background: #0f172a;
+  color: #e5e7eb;
+}
+
+:root {
+  --bg-main: #f5f7fb;
+  --card-bg: #ffffff;
+  --text-primary: #111827;
+  --text-secondary: #6b7280;
+  --shadow: 0 15px 35px rgba(0,0,0,0.12);
+}
+
+body.dark {
+  --bg-main: radial-gradient(circle at top, #0f172a, #020617);
+  --card-bg: linear-gradient(145deg, #111827, #020617);
+  --text-primary: #e5e7eb;
+  --text-secondary: #9ca3af;
+  --shadow: 0 20px 50px rgba(0,0,0,0.6);
+}
+
+body {
+  background: var(--bg-main);
+  color: var(--text-primary);
+  transition: all 0.3s ease;
+}
